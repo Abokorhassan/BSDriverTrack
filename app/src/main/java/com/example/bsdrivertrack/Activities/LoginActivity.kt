@@ -7,6 +7,7 @@ import android.content.Intent
 import android.telecom.Call
 import android.util.Log
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import com.example.bsdrivertrack.ApiClients.DriverApiClient
 import com.example.bsdrivertrack.Models.DriverModel
 import com.example.bsdrivertrack.R
@@ -65,13 +66,24 @@ class LoginActivity : AppCompatActivity() {
 
                         if (response.body()?.isEmpty()!!) {
                             progerssProgressDialog.dismiss()
-                            Toast.makeText(applicationContext, "false", Toast.LENGTH_LONG).show()
-                            Log.e("Log Response", response.body().toString())
+
+                            val builder = AlertDialog.Builder(this@LoginActivity)
+                            builder.setTitle("Error Message")
+                            builder.setMessage("wrong credential or you're not on the Ongoing bus list")
+                            builder.setPositiveButton("Ok", null)
+
+                            val alertDialog:AlertDialog = builder.create()
+                            alertDialog.setCancelable(false)
+                            alertDialog.show()
+
+//                            Toast.makeText(applicationContext, "false", Toast.LENGTH_LONG).show()
+//                            Log.e("Log Response", response.body().toString())
                         }else{
 
                             progerssProgressDialog.dismiss()
-                            Toast.makeText(applicationContext, "true", Toast.LENGTH_LONG).show()
-                            Toast.makeText(applicationContext, response.body()!![0].first_name, Toast.LENGTH_LONG).show()
+//                            Toast.makeText(applicationContext, "true", Toast.LENGTH_LONG).show()
+//                            Toast.makeText(applicationContext, response.body()!![0].first_name, Toast.LENGTH_LONG).show()
+
                             Log.e("Log Response", response.body()!!.toString())
                             val intent = Intent(this@LoginActivity,MainActivity::class.java)
                             intent.putExtra("username",driver_number)
