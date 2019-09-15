@@ -35,7 +35,7 @@ class GoogleMapHelper {
      */
 
     fun getDriverMarkerOptions(position: LatLng): MarkerOptions {
-        val options = getMarkerOptions(R.drawable.car_icon, position)
+        val options = getMarkerOptions(R.drawable.bus_icon, position)
         options.flat(true)
         return options
     }
