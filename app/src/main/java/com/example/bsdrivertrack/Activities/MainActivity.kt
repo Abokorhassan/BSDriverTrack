@@ -55,9 +55,6 @@ class MainActivity : AppCompatActivity() {
 //        super.onCreate(savedInstanceState)
 //        setContentView(R.layout.activity_main)
 //
-//        val name = intent.getStringExtra("name")
-//        val username = intent.getStringExtra("username")
-//
 //        Log.e("ajd", name)
 //        Toast.makeText(applicationContext, name.toString() , Toast.LENGTH_LONG).show()
 //    }
@@ -65,8 +62,8 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val username = intent.getStringExtra("username")
-        val firebaseHelper = FirebaseHelper(username)
+        val station_name = intent.getStringExtra("station_name")
+        val firebaseHelper = FirebaseHelper(station_name)
 
         val mapFragment: SupportMapFragment = supportFragmentManager.findFragmentById(R.id.supportMap) as SupportMapFragment
         mapFragment.getMapAsync { googleMap = it }
@@ -85,8 +82,8 @@ class MainActivity : AppCompatActivity() {
             if (driverOnlineFlag) driverStatusTextView.text = resources.getString(R.string.online_driver)
             else {
                 driverStatusTextView.text = resources.getString(R.string.offline)
-                val username = intent.getStringExtra("username")
-                val firebaseHelper = FirebaseHelper(username)
+                val station_name = intent.getStringExtra("station_name")
+                val firebaseHelper = FirebaseHelper(station_name)
                 firebaseHelper.deleteDriver()
             }
         }
@@ -118,9 +115,16 @@ class MainActivity : AppCompatActivity() {
                     locationFlag = false
                     animateCamera(latLng)
                 }
-                val username = intent.getStringExtra("username")
-                val firebaseHelper = FirebaseHelper(username)
-                if (driverOnlineFlag) firebaseHelper.updateDriver(Driver(lat = latLng.latitude, lng = latLng.longitude))
+
+                val driver_number = intent.getStringExtra("driver_number")
+                val bus_number = intent.getStringExtra("bus_number")
+                val route_name = intent.getStringExtra("route_name")
+                val schedule_number = intent.getStringExtra("schedule_number")
+                val station_name = intent.getStringExtra("station_name")
+
+                val firebaseHelper = FirebaseHelper(station_name)
+                if (driverOnlineFlag) firebaseHelper.updateDriver(Driver(lat = latLng.latitude, lng = latLng.longitude, bus_number = bus_number,
+                    driver_number = driver_number, route_name = route_name, schedule_number = schedule_number, station_name = station_name))
                 showOrAnimateMarker(latLng)
             }
         }

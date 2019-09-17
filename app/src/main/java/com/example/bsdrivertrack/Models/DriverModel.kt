@@ -5,16 +5,24 @@ import com.google.gson.annotations.SerializedName
 
 class DriverModel {
     @Expose
-    @SerializedName("ph_number")
-    val ph_number: Int = 0
+    @SerializedName("bus_number")
+    val bus_number: String = ""
 
     @Expose
     @SerializedName("driver_number")
     val driver_number: String = ""
 
     @Expose
-    @SerializedName("first_name")
-    val first_name: String = ""
+    @SerializedName("route_name")
+    val route_name: String = ""
+
+    @Expose
+    @SerializedName("schedule_number")
+    val schedule_number: String = ""
+
+    @Expose
+    @SerializedName("station_name")
+    val station_name: String = ""
 
 //    @Expose
 //    @SerializedName("id")

@@ -45,7 +45,7 @@ class LoginActivity : AppCompatActivity() {
 
             driver_number = driverNumberTxt.text.toString().trim()
             if (driver_number.isEmpty()){
-                driverNumberTxt.error = "User name is required"
+                driverNumberTxt.error = "Driver Number is required"
                 driverNumberTxt.requestFocus()
                 return@setOnClickListener
             }
@@ -109,7 +109,12 @@ class LoginActivity : AppCompatActivity() {
 
                         Log.e("Log Response", response.body()!!.toString())
                         val intent = Intent(this@LoginActivity,MainActivity::class.java)
-                        intent.putExtra("username",driver_number)
+                        intent.putExtra("driver_number",driver_number)
+                        intent.putExtra("bus_number", response.body()!![0].bus_number)
+                        intent.putExtra("route_name", response.body()!![0].route_name)
+                        intent.putExtra("schedule_number", response.body()!![0].schedule_number)
+                        intent.putExtra("station_name", response.body()!![0].station_name)
+
                         startActivity(intent)
                     }
                 }
@@ -126,6 +131,4 @@ class LoginActivity : AppCompatActivity() {
             return false
         }
     }
-
-
 }

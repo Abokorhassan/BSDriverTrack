@@ -13,7 +13,7 @@ interface RetrofitApiInterface {
 //    @POST("users")
 //    fun login( @Field("username") username:String ): Call<FakeUserModel>
 
-    @GET("data")
+    @GET("onlineDrivers")
     fun checkDriver( @Query("driver_number") driver_number: String ): Call<List<DriverModel>>
 
     @GET("users")
