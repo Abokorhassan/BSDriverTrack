@@ -63,7 +63,8 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         val station_name = intent.getStringExtra("station_name")
-        val firebaseHelper = FirebaseHelper(station_name)
+        val driver_number = intent.getStringExtra("driver_number")
+        val firebaseHelper = FirebaseHelper(station_name, driver_number)
 
         val mapFragment: SupportMapFragment = supportFragmentManager.findFragmentById(R.id.supportMap) as SupportMapFragment
         mapFragment.getMapAsync { googleMap = it }
@@ -83,7 +84,8 @@ class MainActivity : AppCompatActivity() {
             else {
                 driverStatusTextView.text = resources.getString(R.string.offline)
                 val station_name = intent.getStringExtra("station_name")
-                val firebaseHelper = FirebaseHelper(station_name)
+                val driver_number = intent.getStringExtra("driver_number")
+                val firebaseHelper = FirebaseHelper(station_name, driver_number)
                 firebaseHelper.deleteDriver()
             }
         }
@@ -122,7 +124,7 @@ class MainActivity : AppCompatActivity() {
                 val schedule_number = intent.getStringExtra("schedule_number")
                 val station_name = intent.getStringExtra("station_name")
 
-                val firebaseHelper = FirebaseHelper(station_name)
+                val firebaseHelper = FirebaseHelper(station_name, driver_number)
                 if (driverOnlineFlag) firebaseHelper.updateDriver(Driver(lat = latLng.latitude, lng = latLng.longitude, bus_number = bus_number,
                     driver_number = driver_number, route_name = route_name, schedule_number = schedule_number, station_name = station_name))
                 showOrAnimateMarker(latLng)

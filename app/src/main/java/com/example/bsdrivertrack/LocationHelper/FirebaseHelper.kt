@@ -6,17 +6,18 @@ import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 
 
-class FirebaseHelper constructor(station_name: String) {
+class FirebaseHelper constructor(station_name:String, driver_number: String) {
 
     companion object {
         private const val ONLINE_DRIVERS = "online_drivers"
     }
 
     private val onlineDriverDatabaseReference: DatabaseReference = FirebaseDatabase
-            .getInstance()
-            .reference
-            .child(ONLINE_DRIVERS)
-            .child(station_name)
+        .getInstance()
+        .reference
+        .child(ONLINE_DRIVERS)
+        .child(station_name)
+        .child(driver_number)
 
     init {
         onlineDriverDatabaseReference
