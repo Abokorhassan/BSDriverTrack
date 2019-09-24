@@ -2,6 +2,7 @@ package com.example.bsdrivertrack.Activities
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.content.DialogInterface
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -14,7 +15,10 @@ import android.content.pm.PackageManager.PERMISSION_DENIED
 import android.content.pm.PackageManager.PERMISSION_GRANTED
 import android.os.Looper
 import android.provider.Settings
+import android.view.Menu
+import android.view.MenuItem
 import android.widget.TextView
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.SwitchCompat
 import androidx.core.app.ActivityCompat
 import com.google.android.gms.location.*
@@ -51,13 +55,6 @@ class MainActivity : AppCompatActivity() {
     private val markerAnimationHelper = MarkerAnimationHelper()
     private val uiHelper = UiHelper()
 
-//    override fun onCreate(savedInstanceState: Bundle?) {
-//        super.onCreate(savedInstanceState)
-//        setContentView(R.layout.activity_main)
-//
-//        Log.e("ajd", name)
-//        Toast.makeText(applicationContext, name.toString() , Toast.LENGTH_LONG).show()
-//    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -82,6 +79,7 @@ class MainActivity : AppCompatActivity() {
             driverOnlineFlag = b
             if (driverOnlineFlag) driverStatusTextView.text = resources.getString(R.string.online_driver)
             else {
+
                 driverStatusTextView.text = resources.getString(R.string.offline)
                 val station_name = intent.getStringExtra("station_name")
                 val driver_number = intent.getStringExtra("driver_number")
@@ -154,4 +152,34 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        super.onCreateOptionsMenu(menu)
+        menuInflater.inflate(R.menu.main_menu, menu)
+        return true;
+    }
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return  when(item.itemId){
+            R.id.logout ->{
+//                Toast.makeText(applicationContext, "Logout", Toast.LENGTH_LONG).show()
+                val builder = AlertDialog.Builder(this@MainActivity)
+                builder.setTitle("Logout")
+                builder.setMessage("Do you want to logout?")
+                builder.setPositiveButton("Yes", { dialogInterface: DialogInterface, i: Int ->
+                    val station_name = intent.getStringExtra("station_name")
+                    val driver_number = intent.getStringExtra("driver_number")
+                    val firebaseHelper = FirebaseHelper(station_name, driver_number)
+                    firebaseHelper.deleteDriver()
+
+                    val intent = Intent(this@MainActivity,LoginActivity::class.java)
+                    startActivity(intent)
+                })
+                builder.setNegativeButton("No", { dialogInterface: DialogInterface, i: Int -> })
+                val alertDialog: AlertDialog = builder.create()
+                alertDialog.setCancelable(false)
+                alertDialog.show()
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
 }
