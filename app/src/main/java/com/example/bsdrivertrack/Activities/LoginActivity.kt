@@ -114,8 +114,8 @@ class LoginActivity : AppCompatActivity() {
                         intent.putExtra("route_name", response.body()!![0].route_name)
                         intent.putExtra("schedule_number", response.body()!![0].schedule_number)
                         intent.putExtra("station_name", response.body()!![0].station_name)
-
                         startActivity(intent)
+                        finish()
                     }
                 }
             })

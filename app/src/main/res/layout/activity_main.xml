@@ -34,7 +34,7 @@
 
         tools:context="example.com.frisbeeGo.fragments.MapFragment"
         >
-        <Button
+        <TextView
             android:id="@+id/driverStatusTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

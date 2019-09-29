@@ -1,12 +1,13 @@
 package com.example.bsdrivertrack.LocationHelper
 
+import android.graphics.Color
+import android.util.Log
+import com.example.bsdrivertrack.Activities.MainActivity
 import com.example.bsdrivertrack.R
 import com.google.android.gms.maps.CameraUpdate
 import com.google.android.gms.maps.CameraUpdateFactory
-import com.google.android.gms.maps.model.BitmapDescriptorFactory
-import com.google.android.gms.maps.model.CameraPosition
-import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.MarkerOptions
+import com.google.android.gms.maps.model.*
+import com.google.maps.android.PolyUtil
 
 class GoogleMapHelper {
 
@@ -44,5 +45,16 @@ class GoogleMapHelper {
         return MarkerOptions()
                 .icon(BitmapDescriptorFactory.fromResource(resource))
                 .position(position)
+    }
+
+     fun getPolylineOptions(path:String): PolylineOptions {
+         val decodedPath = PolyUtil.decode(path)
+         val a = LatLng(9.562389, 44.077011)
+         val b = LatLng(28.6969421, 77.1423825)
+         return PolylineOptions()
+             .addAll(decodedPath)
+             .geodesic(true)
+             .color(Color.RED)
+             .width(8f)
     }
 }
