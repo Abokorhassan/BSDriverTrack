@@ -72,6 +72,7 @@ class LoginActivity : AppCompatActivity() {
                 ) {
                     progerssProgressDialog.dismiss()
                     Toast.makeText(applicationContext, "Error! there was problem connecting to the server", Toast.LENGTH_LONG).show()
+                    Toast.makeText(applicationContext, t.message, Toast.LENGTH_LONG).show()
                     Log.e("Log Response", t.message)
                 }
 

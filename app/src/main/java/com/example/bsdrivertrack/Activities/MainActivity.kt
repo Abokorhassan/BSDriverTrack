@@ -10,7 +10,6 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
 import com.example.bsdrivertrack.R
-import com.google.android.gms.maps.model.Marker
 
 import android.content.pm.PackageManager.PERMISSION_DENIED
 import android.content.pm.PackageManager.PERMISSION_GRANTED
@@ -28,7 +27,6 @@ import com.google.android.gms.location.*
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
-import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.location.*
 import com.example.bsdrivertrack.LocationHelper.*
 import com.example.bsdrivertrack.LocationInterfaces.IPositiveNegativeListener
@@ -36,7 +34,8 @@ import com.example.bsdrivertrack.LocationInterfaces.LatLngInterpolator
 import com.example.bsdrivertrack.LocationModel.Driver
 import com.example.bsdrivertrack.Models.DriverModel
 import com.example.bsdrivertrack.Models.RouteModel
-import com.google.android.gms.maps.model.PolylineOptions
+import com.example.bsdrivertrack.Models.StationModel
+import com.google.android.gms.maps.model.*
 import retrofit2.Response
 import javax.security.auth.callback.Callback
 
@@ -76,6 +75,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         mapFragment.getMapAsync(this)
         displayProgrDial()
         getRoute()
+        getStation()
 //        displayPolyline()
         createLocationCallback()
         locationProviderClient = LocationServices.getFusedLocationProviderClient(this)
@@ -224,8 +224,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
                         Toast.makeText(applicationContext, "Empty", Toast.LENGTH_LONG).show()
                         Log.e("Log Response", response.body().toString())
                     }else{
-                        progerssProgressDialog.dismiss()
-                        Toast.makeText(applicationContext, response.body()!![0].path, Toast.LENGTH_LONG).show()
+//                        progerssProgressDialog.dismiss()
                         val passedPath = response.body()!![0].path
                         displayPolyline(passedPath)
                         Log.e("Log Response", response.body()!!.toString())
@@ -236,17 +235,63 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
 
     private fun displayProgrDial(){
         progerssProgressDialog= ProgressDialog(this)
-        progerssProgressDialog.setTitle("Drawing Route")
+        progerssProgressDialog.setTitle("Drawing Route and marking the station")
         progerssProgressDialog.setCancelable(false)
         progerssProgressDialog.show()
+    }
+
+    private fun getStation(){
+        val station_name = intent.getStringExtra("station_name")
+        Log.e("STATION -----------", station_name)
+        DriverApiClient.getClient.getStation(station_name)
+            .enqueue(object : retrofit2.Callback<List<StationModel>> {
+                override fun onFailure(
+                    call: retrofit2.Call<List<StationModel>>,
+                    t: Throwable
+                ) {
+                    progerssProgressDialog.dismiss()
+                    Toast.makeText(applicationContext, "Error! there was problem connecting to the server", Toast.LENGTH_LONG).show()
+                    Log.e("Log Response", t.message)
+                }
+
+                override fun onResponse(
+                    call: retrofit2.Call<List<StationModel>>,
+                    response: Response<List<StationModel>>
+                ) {
+                    Log.e("OnResponse", response.body().toString());
+                    if(!response.isSuccessful){
+                        progerssProgressDialog.dismiss()
+                        Toast.makeText(applicationContext, response.code(), Toast.LENGTH_SHORT).show()
+                        Log.e("Log Response", response.code().toString())
+                        return
+                    }
+                    if (response.body()?.isEmpty()!!) {
+                        progerssProgressDialog.dismiss()
+                        Toast.makeText(applicationContext, "Empty STATION ", Toast.LENGTH_LONG).show()
+                        Log.e("Log Response", response.body().toString())
+                    }else{
+                        progerssProgressDialog.dismiss()
+                        val station_lat = response.body()!![0].latitude
+                        val station_long = response.body()!![0].longitude
+                        val station_coordinates = LatLng(station_lat, station_long)
+                        addMarker(station_coordinates)
+                    }
+                }
+            })
     }
 
     private fun displayPolyline(path:String){
         googleMap?.addPolyline(googleMapHelper.getPolylineOptions(path))
     }
 
+    private fun addMarker(station_coordinates:LatLng){
+        googleMap?.addMarker(MarkerOptions().position(station_coordinates).icon(BitmapDescriptorFactory.fromResource(R.drawable.bus_station)))
+
+    }
+
     override fun onMapReady(mMap: GoogleMap){
         googleMap = mMap
+
 
     }
 
@@ -256,7 +301,6 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
 
     override fun onPause() {
         super.onPause()
-        Toast.makeText(applicationContext, "On Pause", Toast.LENGTH_LONG).show()
         createLocationCallback()
         locationProviderClient = LocationServices.getFusedLocationProviderClient(this)
         locationRequest = uiHelper.getLocationRequest()

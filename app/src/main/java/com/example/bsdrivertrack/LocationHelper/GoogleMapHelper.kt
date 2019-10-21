@@ -47,7 +47,7 @@ class GoogleMapHelper {
                 .position(position)
     }
 
-     fun getPolylineOptions(path:String): PolylineOptions {
+    fun getPolylineOptions(path:String): PolylineOptions {
          val decodedPath = PolyUtil.decode(path)
          val a = LatLng(9.562389, 44.077011)
          val b = LatLng(28.6969421, 77.1423825)

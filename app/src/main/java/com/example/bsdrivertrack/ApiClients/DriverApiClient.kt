@@ -10,8 +10,8 @@ import java.util.concurrent.TimeUnit
 
 object DriverApiClient {
 
+//    var BASE_URL:String="http://192.168.1.103/BSProject/public/"
     var BASE_URL:String="http://192.168.1.128/BSProject/public/"
-//    var BASE_URL:String="https://jsonplaceholder.typicode.com/"
 
     val getClient: RetrofitApiInterface
         get() {
