@@ -122,7 +122,7 @@ class LoginActivity : AppCompatActivity() {
             })
     }
 
-
+    // checking connection
     private fun  checkConnType(): Boolean {
         val connManger:ConnectivityManager = this.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         val networkConnection = connManger.activeNetworkInfo
