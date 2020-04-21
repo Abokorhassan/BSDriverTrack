@@ -18,6 +18,7 @@ interface RetrofitApiInterface {
     @GET("onlineDrivers")
     fun checkDriver( @Query("driver_number") driver_number: String ): Call<List<DriverModel>>
 
+    // gettting the routes
     @GET("routes")
     fun getRoute( @Query("name") name: String ): Call<List<RouteModel>>
 
