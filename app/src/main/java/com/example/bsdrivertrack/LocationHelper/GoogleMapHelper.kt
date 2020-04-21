@@ -57,4 +57,5 @@ class GoogleMapHelper {
              .color(Color.RED)
              .width(8f)
     }
+
 }
